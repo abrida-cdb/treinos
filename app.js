@@ -3,7 +3,7 @@
    Treinos — app de academia (PWA)
    Dados ficam no aparelho (localStorage). Backup em Excel/JSON.
    ============================================================ */
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.0.1';
 const KEY = 'treinos-app-v1', DKEY = 'treinos-app-rascunhos';
 
 /* ---------- constantes ---------- */
@@ -109,7 +109,7 @@ function setDrafts(o){ try{ localStorage.setItem(DKEY, JSON.stringify(o)); }catc
 const sortDesc = arr => arr.slice().sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:String(b.savedAt||'').localeCompare(String(a.savedAt||'')));
 
 /* ---------- animações ---------- */
-let live = [], clock = 0, last = performance.now();
+let live = [], clock = 0, last = performance.now(), deferredInstall = null;
 const DUR = 2700;
 function tileHTML(ex, label){
   const p = P[ex.pat];
@@ -190,6 +190,7 @@ function vTreino(){
       </div></li>`;}).join('');
   const hist = sortDesc(p.sessions.filter(s=>s.dayId===d.id || (!s.dayId && s.dayLabel===d.label))).slice(0,5);
   return `<div style="--acc:${pl.c};--acc-ui:${pl.light?'var(--fg)':pl.c};--acc-fig:${pl.fig}">
+    ${deferredInstall?`<div class="pending" style="margin-bottom:16px"><b>Instale o app neste celular</b><span class="small muted">Ele fica na tela inicial, abre em tela cheia e funciona sem internet.</span><div class="row"><button type="button" class="btn primary" data-act="install">Instalar app</button></div></div>`:''}
     <h1 class="view-h">${esc(p.plan.name)}</h1>
     ${week}
     <div class="day-head">
@@ -401,7 +402,7 @@ function bind(el){
 }
 
 /* ---------- BACKUP / PERFIS ---------- */
-let deferredInstall = null, pendingImport = null;
+let pendingImport = null;
 const canShare = () => { try{ return !!(navigator.canShare && navigator.canShare({files:[new File(['x'],'x.txt',{type:'text/plain'})]})); }catch(e){ return false; } };
 function fileRow(what, label){
   return `<div class="row"><button type="button" class="btn" data-act="export" data-what="${what}" data-how="download">Baixar ${label}</button>${canShare()?`<button type="button" class="btn" data-act="export" data-what="${what}" data-how="share">Enviar…</button>`:''}</div>`;
@@ -631,7 +632,8 @@ document.addEventListener('submit', ev=>{
   const f = ev.target.closest('[data-form]'); if (!f) return; ev.preventDefault();
   if (f.dataset.form==='measure') saveMeasure(); else if (f.dataset.form==='exercise') saveExercise(f);
 });
-window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredInstall = e; if (S.ui.view==='mais') render(); });
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredInstall = e; if (S.ui.view==='mais'||S.ui.view==='treino') render(); });
+window.addEventListener('appinstalled', ()=>{ deferredInstall = null; render(); toast('App instalado. Abra pelo ícone Treinos na tela inicial.'); });
 
 /* ---------- service worker ---------- */
 if ('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost') && !window.NO_SW){
