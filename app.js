@@ -3,7 +3,7 @@
    Treinos — app de academia (PWA)
    Dados ficam no aparelho (localStorage). Backup em Excel/JSON.
    ============================================================ */
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
 const KEY = 'treinos-app-v1', DKEY = 'treinos-app-rascunhos';
 
 /* ---------- constantes ---------- */
@@ -92,12 +92,17 @@ function normPlan(pl){ return {name:String(pl.name||'Treino').slice(0,80), days:
 function newProfile(name, plan, fields){ return {id:uid(), name, plan, fields:fields||['peso','gordura'], sessions:[], measures:[]}; }
 function seedState(){
   const a = newProfile('André', normPlan(SEED_PLANS.masc), ['peso','gordura']);
-  const b = newProfile('Feminino', normPlan(SEED_PLANS.fem), ['peso','gordura','peito','cintura']);
+  const b = newProfile('Andressa', normPlan(SEED_PLANS.fem), ['peso','gordura','peito','cintura']);
   return {v:1, active:a.id, profiles:[a,b], ui:{view:'treino', day:{}, anim:!matchMedia('(prefers-reduced-motion: reduce)').matches}};
 }
 function load(){
-  try{ const raw = localStorage.getItem(KEY); if (raw){ S = JSON.parse(raw); if (S && Array.isArray(S.profiles) && S.profiles.length){ S.ui = Object.assign({view:'treino',day:{},anim:true}, S.ui||{}); return; } } }catch(e){}
+  try{ const raw = localStorage.getItem(KEY); if (raw){ S = JSON.parse(raw); if (S && Array.isArray(S.profiles) && S.profiles.length){ S.ui = Object.assign({view:'treino',day:{},anim:true}, S.ui||{}); migrate(); return; } } }catch(e){}
   S = seedState(); save();
+}
+/* ajustes únicos em dados já gravados no aparelho */
+function migrate(){
+  S.mig = S.mig || {};
+  if (!S.mig.andressa){ const q = S.profiles.find(p=>p.name==='Feminino'); if (q) q.name = 'Andressa'; S.mig.andressa = true; save(); }
 }
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); return true; }
