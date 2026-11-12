@@ -3,7 +3,7 @@
    Treinos — app de academia (PWA)
    Dados ficam no aparelho (localStorage). Backup em Excel/JSON.
    ============================================================ */
-const APP_VERSION = '1.0.4';
+const APP_VERSION = '1.0.5';
 const KEY = 'treinos-app-v1', DKEY = 'treinos-app-rascunhos';
 
 /* ---------- constantes ---------- */
@@ -643,11 +643,13 @@ window.addEventListener('appinstalled', ()=>{ deferredInstall = null; render(); 
 /* ---------- service worker ---------- */
 if ('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost') && !window.NO_SW){
   window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').then(reg=>{
-      reg.addEventListener('updatefound', ()=>{ const w=reg.installing; if (!w) return;
-        w.addEventListener('statechange', ()=>{ if (w.state==='installed' && navigator.serviceWorker.controller) toast('Nova versão do app disponível.', 'Atualizar', ()=>w.postMessage('skip')); }); });
+    const hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(reg=>{
+      if (reg.waiting) reg.waiting.postMessage('skip');
+      reg.addEventListener('updatefound', ()=>{ const w=reg.installing; if (w) w.addEventListener('statechange', ()=>{ if (w.state==='installed') w.postMessage('skip'); }); });
+      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) reg.update().catch(()=>{}); });
     }).catch(()=>{});
-    let reloaded=false; navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if (!reloaded){ reloaded=true; location.reload(); } });
+    let reloaded=false; navigator.serviceWorker.addEventListener('controllerchange', ()=>{ if (hadController && !reloaded){ reloaded=true; saveDraft(); location.reload(); } });
   });
 }
 
