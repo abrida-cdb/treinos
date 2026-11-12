@@ -3,13 +3,13 @@
    Treinos — app de academia (PWA)
    Dados ficam no aparelho (localStorage). Backup em Excel/JSON.
    ============================================================ */
-const APP_VERSION = '1.0.3';
+const APP_VERSION = '1.0.4';
 const KEY = 'treinos-app-v1', DKEY = 'treinos-app-rascunhos';
 
 /* ---------- constantes ---------- */
 const PLATES = [
-  {c:'var(--red)',fig:'#ff5d4a'},{c:'var(--blue)',fig:'#5594ff'},{c:'var(--yellow)',fig:'#ffcb33',light:true},
-  {c:'var(--green)',fig:'#40d37c'},{c:'var(--white)',fig:'#ffffff',light:true},{c:'var(--black)',fig:'#c5cbd2'}
+  {c:'var(--red)',fig:'#ff5d4a',t:'var(--red)'},{c:'var(--blue)',fig:'#5594ff',t:'var(--blue)'},{c:'var(--yellow)',fig:'#ffcb33',light:true,t:'var(--yellow-t)'},
+  {c:'var(--green)',fig:'#40d37c',t:'var(--green)'},{c:'var(--white)',fig:'#ffffff',light:true,t:'var(--fg)'},{c:'var(--black)',fig:'#c5cbd2',t:'var(--fg)'}
 ];
 const WEEKDAYS = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 const REPS_ONLY = ['crunch','legraise','hyper','plank','sideplank','deadbug','mountain','carry'];
@@ -194,7 +194,7 @@ function vTreino(){
         <a class="vid" href="${esc(ex.video||yt(ex.n))}" target="_blank" rel="noopener">Ver vídeo de execução ↗</a>
       </div></li>`;}).join('');
   const hist = sortDesc(p.sessions.filter(s=>s.dayId===d.id || (!s.dayId && s.dayLabel===d.label))).slice(0,5);
-  return `<div style="--acc:${pl.c};--acc-ui:${pl.light?'var(--fg)':pl.c};--acc-fig:${pl.fig}">
+  return `<div style="--acc:${pl.c};--acc-ui:${pl.light?'var(--fg)':pl.c};--acc-fig:${pl.fig};--acc-t:${pl.t}">
     ${deferredInstall?`<div class="pending" style="margin-bottom:16px"><b>Instale o app neste celular</b><span class="small muted">Ele fica na tela inicial, abre em tela cheia e funciona sem internet.</span><div class="row"><button type="button" class="btn primary" data-act="install">Instalar app</button></div></div>`:''}
     <h1 class="view-h">${esc(p.plan.name)}</h1>
     ${week}

@@ -1,7 +1,7 @@
 /* Layout: app de uma coluna para celular; barra superior com perfil, navegação fixa embaixo; dias como anilhas */
 :root{
   --bg:#eef0f2; --fg:#15181c; --muted:#59616a; --line:#d4d8dd; --chip:#e1e5e9; --raise:#f8f9fa;
-  --red:#cf3a2c; --blue:#2b61c4; --yellow:#e0ad16; --green:#2c9551; --white:#fbfbfb; --black:#2b2f35;
+  --red:#cf3a2c; --blue:#2b61c4; --yellow:#e0ad16; --yellow-t:#946c00; --green:#2c9551; --white:#fbfbfb; --black:#2b2f35;
   --tile:#1d2024; --tile-dot:#2a2e33; --fig:#c5cbd2; --fig2:#6a727c; --steel:#8b949e; --steel-d:#5d6670; --pad:#474d55;
   --ok:#1f7a45; --warn:#a4400e;
   --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
@@ -12,11 +12,11 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111316; --fg:#e6e9ec; --muted:#9aa2ab; --line:#2a2f35; --chip:#1e2227; --raise:#171a1e;
-  --red:#e4584b; --blue:#5b8de2; --yellow:#efc23b; --green:#49b56f; --white:#f2f2f2; --black:#3b4048;
+  --red:#e4584b; --blue:#5b8de2; --yellow:#efc23b; --yellow-t:#efc23b; --green:#49b56f; --white:#f2f2f2; --black:#3b4048;
   --tile:#191c20; --tile-dot:#25292e; --ok:#58c487; --warn:#f08a4b; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111316; --fg:#e6e9ec; --muted:#9aa2ab; --line:#2a2f35; --chip:#1e2227; --raise:#171a1e;
-  --red:#e4584b; --blue:#5b8de2; --yellow:#efc23b; --green:#49b56f; --white:#f2f2f2; --black:#3b4048;
+  --red:#e4584b; --blue:#5b8de2; --yellow:#efc23b; --yellow-t:#efc23b; --green:#49b56f; --white:#f2f2f2; --black:#3b4048;
   --tile:#191c20; --tile-dot:#25292e; --ok:#58c487; --warn:#f08a4b; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -138,7 +138,7 @@ ol.ex>li{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;padding
 .log{display:grid;gap:8px;padding:12px;border-radius:8px;border:1.5px dashed var(--line);max-width:440px}
 .log .fld input{padding:8px 9px;font-variant-numeric:tabular-nums}
 .loads{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px}
-.log .loadset>span,.loads .fld>span{color:var(--green);font-weight:600}
+.log .loadset>span,.loads .fld>span{color:var(--acc-t,var(--fg));font-weight:600}
 .last{margin:0;font-size:13.5px;color:var(--muted)}
 .cardio{margin-top:6px;padding:16px 18px;border-radius:10px;background:var(--raise);border:1px solid var(--line);display:grid;gap:4px}
 .cardio h3{font:700 17px/1.25 var(--f-body)}
