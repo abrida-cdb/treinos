@@ -138,6 +138,7 @@ ol.ex>li{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;padding
 .log{display:grid;gap:8px;padding:12px;border-radius:8px;border:1.5px dashed var(--line);max-width:440px}
 .log .fld input{padding:8px 9px;font-variant-numeric:tabular-nums}
 .loads{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:8px}
+.log .loadset>span,.loads .fld>span{color:var(--green);font-weight:600}
 .last{margin:0;font-size:13.5px;color:var(--muted)}
 .cardio{margin-top:6px;padding:16px 18px;border-radius:10px;background:var(--raise);border:1px solid var(--line);display:grid;gap:4px}
 .cardio h3{font:700 17px/1.25 var(--f-body)}

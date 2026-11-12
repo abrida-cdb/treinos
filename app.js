@@ -3,7 +3,7 @@
    Treinos — app de academia (PWA)
    Dados ficam no aparelho (localStorage). Backup em Excel/JSON.
    ============================================================ */
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '1.0.3';
 const KEY = 'treinos-app-v1', DKEY = 'treinos-app-rascunhos';
 
 /* ---------- constantes ---------- */
@@ -185,7 +185,7 @@ function vTreino(){
         <div class="rx"><span>${n} × ${esc(ex.reps)} <small>séries × reps</small></span>${ex.rest?`<span>${esc(ex.rest)} <small>descanso</small></span>`:''}</div>
         <div class="log" data-ex="${ex.id}" data-code="${esc(code)}">
           <label class="fld"><span>Exercício feito (se trocou)</span><input id="lg-${ex.id}-x" type="text" autocomplete="off" placeholder="${esc(ex.n)}"></label>
-          <div class="fld"><span>Carga por série ${livre?'(kg, s, m ou reps)':'(kg)'}</span>
+          <div class="fld loadset"><span>Carga por série ${livre?'(kg, s, m ou reps)':'(kg)'}</span>
             <div class="loads" style="--n:${Math.min(n,4)}">${Array.from({length:n},(_,k)=>`<label class="fld"><span>S${k+1}</span><input id="lg-${ex.id}-${k}" type="text" inputmode="${livre?'text':'decimal'}" autocomplete="off" placeholder="${livre?'—':'kg'}"></label>`).join('')}</div>
           </div>
           <p class="last">${lastText(p,d,ex,code)}</p>
